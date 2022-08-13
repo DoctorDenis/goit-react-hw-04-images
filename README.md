@@ -1,1 +1,1 @@
-# goit-react-hw-04-imageі
+# goit-react-hw-04-images
