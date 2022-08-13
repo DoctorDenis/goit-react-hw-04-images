@@ -5,7 +5,6 @@ export default function ImageGalleryItem({
   image: { webformatURL, largeImageURL, tags },
   onClick,
 }) {
-  console.log(tags);
   return (
     <li className={styles.ImageGalleryItem}>
       <img
