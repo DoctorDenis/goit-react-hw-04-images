@@ -17,27 +17,18 @@ function App() {
   const [modalOpened, setModalOpened] = useState(false);
   const [imageInfo, setImageInfo] = useState(null);
 
-  // state = {
-  //   images: [],
-  //   query: '',
-  //   page: 1,
-  //   status: 'resting',
-  //   modalOpened: false,
-  //   imageInfo: null,
-  // };
-
   useEffect(() => {
     setStatus('waiting');
-
     fetchImages(query, page)
-      .then(async data => {
-        const ImagesArray = filteredPropertiesArray(data.hits);
-        setImages([...images, ...ImagesArray]);
+      .then(data => {
+        const imagesArray = filteredPropertiesArray(data.hits);
+        setImages([...images, ...imagesArray]);
         setStatus('ok');
       })
       .catch(error => {
         setStatus('error');
       });
+    // eslint-disable-next-line
   }, [query, page]);
 
   const submitHandler = event => {
