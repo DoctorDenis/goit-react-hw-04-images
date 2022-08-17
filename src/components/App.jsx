@@ -18,22 +18,44 @@ function App() {
   const [imageInfo, setImageInfo] = useState(null);
 
   useEffect(() => {
+    fetchData(query, page);
+    // eslint-disable-next-line
+  }, [query, page]);
+
+  useEffect(() => {
+    if (page > 1) {
+      const { height: cardHeight } = document
+        .querySelector('.imageGallery')
+        ?.lastElementChild.getBoundingClientRect();
+      window.scrollBy({
+        top: cardHeight * 2,
+        behavior: 'smooth',
+      });
+    }
+  }, [images, page]);
+
+  const fetchData = (query, page) => {
+    if (query === '') {
+      setStatus('resting');
+      return;
+    }
     setStatus('waiting');
     fetchImages(query, page)
-      .then(data => {
-        const imagesArray = filteredPropertiesArray(data.hits);
-        setImages([...images, ...imagesArray]);
-        setStatus('ok');
+      .then(async data => {
+        const imagesArray = await filteredPropertiesArray(data.hits);
+        if (imagesArray.length === 0) {
+          setStatus('empty');
+        } else {
+          setImages([...images, ...imagesArray]);
+          setStatus('ok');
+        }
       })
       .catch(error => {
         setStatus('error');
       });
-    // eslint-disable-next-line
-  }, [query, page]);
+  };
 
-  const submitHandler = event => {
-    event.preventDefault();
-    const query = event.target.elements.query.value;
+  const submitHandler = query => {
     setQuery(query);
     setPage(1);
     setImages([]);
@@ -56,7 +78,11 @@ function App() {
   return (
     <>
       <Searchbar onSubmit={submitHandler} />
-
+      {status === 'empty' && (
+        <h2>
+          Sorry! No images found on <i>{query}</i> query
+        </h2>
+      )}
       {images.length > 0 && (
         <>
           <ImageGallery images={images} onClick={openModal} />

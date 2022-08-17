@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 
 export function ImageGallery({ images, onClick }) {
   return (
-    <ul className={styles.ImageGallery}>
+    <ul className={styles.ImageGallery + ' imageGallery'}>
       {images.map(image => (
         <ImageGalleryItem key={image.id} image={image} onClick={onClick} />
       ))}
